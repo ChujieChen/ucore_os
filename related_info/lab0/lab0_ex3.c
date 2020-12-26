@@ -29,7 +29,20 @@ typedef unsigned uint32_t;
     unsigned gd_p : 1;                // Present
     unsigned gd_off_31_16 : 16;        // high bits of offset in segment
  };
- 
+ /*
+// #define SETGATE(gate, istrap, sel, off, dpl) {            \ //8, 0, 1, 2, 3
+//     (gate).gd_off_15_0 = (uint32_t)(off) & 0xffff;        \  // 0010
+//     (gate).gd_ss = (sel);                                \ // 0001
+//     (gate).gd_args = 0;                                    \ // 0000
+//     (gate).gd_rsv1 = 0;                                    \ // 0000
+//     (gate).gd_type = (istrap) ? STS_TG32 : STS_IG32;    \ // 1110  !!! STS_IG32=e was used
+//     (gate).gd_s = 0;                                    \ // 0000
+//     (gate).gd_dpl = (dpl);                                \ // 0011
+//     (gate).gd_p = 1;                                    \ // 0001
+//     (gate).gd_off_31_16 = (uint32_t)(off) >> 16;        \ // 0000
+// }
+// unsigned converter: https://www.mathsisfun.com/binary-decimal-hexadecimal-converter.html
+*/
 int
 main(void)
 {
@@ -45,8 +58,12 @@ main(void)
     SETGATE(gintr, 0,1,2,3);
     intr=*(unsigned *)&(gintr);
     printf("intr is 0x%x\n",intr);
-    printf("gintr is 0x%llx\n",gintr);
-    
+//    printf("gintr is 0x%llx\n",gintr);
+    // added by Cj
+    printf ("gintr is 0x%x%x%x%x%x%x%x%x%x\n", gintr.gd_off_31_16,
+            gintr.gd_p, gintr.gd_dpl, gintr.gd_s, gintr.gd_type, gintr.gd_rsv1,
+            gintr.gd_args, gintr.gd_ss, gintr.gd_off_15_0);
+    printf("STS_TG32 is: %x \n", STS_TG32);
     return 0;
 }
 

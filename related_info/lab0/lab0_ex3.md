@@ -50,4 +50,28 @@ intr=8;
 SETGATE(intr, 0,1,2,3);
 ```
 请问执行上述指令后， intr的值是多少？
+unsigned gd_off_15_0 : 16  ==> This construct specifies the length
+in bits for each field.
+The size always gets rounded up to the next multiple of 8 for every
+group of unsigned xxx:yy; construct.
+See more here: https://stackoverflow.com/questions/2950029/what-does-unsigned-temp3-in-a-struct-or-union-mean
+
+After running the lab0_ex3.c, I got:
+```
+intr is 0x10002                                                                                                                         
+gintr is 0xee0000010002 
+```
+
+Try below command:
+```
+$cd related_info/lab0
+gcc -g -m32 lab0_ex3.c 2>&1|tee make.log
+```
+then do debugging if needed.
+
+Result: 
+1. print hex of the `gintr` one by one
+2. `STS_IG32` was `0xE` when the program was running
+
+
 
